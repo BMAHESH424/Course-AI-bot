@@ -1,22 +1,42 @@
-# --- Core Dependencies ---
-streamlit>=1.36.0
-python-dotenv>=1.0.1
+# --- Core Environment ---
+python-dotenv
+streamlit
 
-# --- LangChain + Google Generative AI ---
-langchain>=0.2.14
-langchain-community>=0.2.11
-langchain-google-genai>=1.0.6
-faiss-cpu>=1.8.0
+# --- Google / Gemini API ---
+langchain
+langchain-community
+langchain-google-genai
 
-# --- Web Scraping / Document Loading ---
-beautifulsoup4>=4.12.3
-requests>=2.31.0
+# --- Vector Database ---
+faiss-cpu
 
-# --- Optional Voice / TTS / Translation ---
-SpeechRecognition>=3.10.4
-gTTS>=2.5.1
-deep-translator>=1.11.4
-pydub>=0.25.1
+# --- Text Splitting and Document Handling ---
+tiktoken
+beautifulsoup4
+html2text
 
-# --- Utilities ---
-tqdm>=4.66.4
+# --- Speech and Audio ---
+SpeechRecognition
+gTTS
+pydub
+
+# --- Translation ---
+deep-translator
+
+# --- Async Handling ---
+aiohttp
+
+# --- Miscellaneous Utilities ---
+requests
+numpy
+pandas
+
+# --- Environment and Parsing ---
+python-dateutil
+
+# --- Optional (for Web Loader, safer HTML parsing, etc.) ---
+lxml
+
+# --- For .env and file handling ---
+dotenv
+
