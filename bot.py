@@ -14,6 +14,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+import asyncio
 
 # Optional features (voice input / TTS / translation)
 # Note: Streamlit microphone input is often tricky in web deployments.
@@ -225,6 +226,28 @@ st.markdown(
       color: var(--text-primary);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
+    
+    /* ----------------------------------------------------- */
+    /* MODIFICATION 1: Enhance Text Visibility for Black BG  */
+    /* ----------------------------------------------------- */
+    .main .block-container * {
+        color: var(--text-accent) !important; /* Ensure primary text is visible */
+    }
+    
+    .main .block-container h1, .main .block-container h2, .main .block-container h3, .main .block-container strong {
+        color: var(--text-primary) !important; /* Headings and strong text bright white */
+    }
+    
+    .stAlert div[data-testid="stMarkdownContainer"] {
+        color: var(--bg-primary) !important; /* Ensure text inside alerts is readable against alert background */
+    }
+    
+    .st-emotion-cache-1c9asg8 a, .st-emotion-cache-1c9asg8 a:hover {
+        color: var(--primary-light) !important; /* Ensure links are visible */
+    }
+    /* ----------------------------------------------------- */
+    
+    
 
     /* Sidebar Styling */
     [data-testid="stSidebar"] { 
@@ -550,6 +573,11 @@ LANGUAGE_MAP = {
 
 @st.cache_resource(show_spinner=False)
 def get_embeddings():
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.set_event_loop(asyncio.new_event_loop())  
+
     """
     Initializes and returns the Google Generative AI Embeddings model for RAG.
     """
@@ -604,6 +632,8 @@ def maybe_translate(text: str, target_lang_code: str) -> str:
     if not GoogleTranslator or target_lang_code == "en":
         return text
     try:
+        # Note: GoogleTranslator auto-detects source language, but setting 'en' as default source
+        # works well since the LLM response is generated in English first.
         return GoogleTranslator(source="en", target=target_lang_code).translate(text)
     except Exception:
         return text
@@ -617,8 +647,10 @@ with st.sidebar:
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="sidebar-card">🎛️ I/O Options</div>', unsafe_allow_html=True)
-    enable_voice = st.checkbox("Microphone input", value=False, disabled=(sr is None))
-    enable_tts = st.checkbox("Text-to-speech", value=False, disabled=(gTTS is None))
+    # Client Request 2: Enable Microphone Input (already present, ensured not disabled if sr is available)
+    enable_voice = st.checkbox("🎤 Microphone input (Client Request 2)", value=False, disabled=(sr is None))
+    # Client Request 1: Response should be spell out (already present, ensured not disabled if gTTS is available)
+    enable_tts = st.checkbox("🔊 Text-to-speech (Client Request 1)", value=False, disabled=(gTTS is None))
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Export & Share
@@ -818,9 +850,10 @@ with chat_tab:
             processed_query = f"About the {current_course}: {pending_query}"
 
             # Prepare the RAG prompt template (LLM still uses this instruction set)
+            # MODIFICATION 2: Added instruction for concise, professional, and varied phrasing to reduce repetition
             prompt_template = (
                 f"You are a helpful and knowledgeable course assistant for NareshIT, specifically focused on the '{current_course}' course.\n"
-                "Your goal is to answer student questions based *only* on the provided course context.\n"
+                "Your goal is to answer student questions based *only* on the provided course context. Be concise, professional, and use varied phrasing.\n" 
                 "If the context does not contain the specific information requested, you must clearly state that the information is unavailable in the document and then proactively provide the contact number for human support: "
                 f"\"I couldn't find that specific detail in the course material, but you can always check the course page or call us directly at {contact_number} for the latest batch and prerequisite details.\"\n\n"
                 "Context:\n{context}\n\n"
@@ -830,10 +863,11 @@ with chat_tab:
             prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
 
             # Use ChatGoogleGenerativeAI (Gemini)
+            # MODIFICATION 3: Increased temperature to 0.5 to reduce repetition/rigidity in responses (Client Request 4)
             llm = ChatGoogleGenerativeAI(
                 model="gemini-2.5-flash", 
                 google_api_key=gemini_api_key, 
-                temperature=0.2, 
+                temperature=0.5, 
                 max_output_tokens=512
             )
 
@@ -865,14 +899,14 @@ with chat_tab:
                     f"{contact_number}** for immediate assistance."
                 )
 
-            # Translate if needed
+            # Translate if needed (Client Request 3)
             final_answer = maybe_translate(answer, target_lang_code)
             st.session_state["messages"].append({"role": "assistant", "content": final_answer})
 
             # Render AI response
             st.markdown(f"<div class='stChatMessage bot-msg'>{final_answer}</div>", unsafe_allow_html=True)
 
-            # TTS
+            # TTS (Client Request 1: Spell out)
             if enable_tts and final_answer:
                 audio_tag = tts_to_audio_tag(final_answer, target_lang_code)
                 if audio_tag:
@@ -900,6 +934,7 @@ with chat_tab:
         with col1:
             submitted = st.form_submit_button("🚀 Send", type="primary", use_container_width=True, disabled=disabled_input)
         with col2:
+            # Voice button for microphone input (Client Request 2)
             if enable_voice and sr is not None:
                 # Use a different key/logic for voice input to avoid conflicts
                 if st.form_submit_button("🎤 Voice", use_container_width=True, disabled=disabled_input):
