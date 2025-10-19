@@ -1,12 +1,11 @@
 streamlit
-langchain
+langchain==0.1.20  # PINNING the version for stability
 langchain-google-genai
-langchain-community 
-langchain-text-splitters 
+langchain-community==0.0.35 # PINNING for compatibility with 0.1.20
+langchain-text-splitters # Still include, though 0.1.20 uses the old internal path.
 beautifulsoup4
 faiss-cpu
 python-dotenv
 gTTS
 deep-translator
 SpeechRecognition
-
