@@ -1,44 +1,10 @@
-# --- Core Environment ---
-python-dotenv
 streamlit
-
-# --- Google / Gemini API ---
+python-dotenv
 langchain
 langchain-community
 langchain-google-genai
-langchain-text-splitters
-
-# --- Vector Database ---
 faiss-cpu
-
-# --- Text Splitting and Document Handling ---
-tiktoken
 beautifulsoup4
-html2text
-
-# --- Speech and Audio ---
-SpeechRecognition
 gTTS
-pydub
-
-# --- Translation ---
 deep-translator
-
-# --- Async Handling ---
-aiohttp
-
-# --- Miscellaneous Utilities ---
-requests
-numpy
-pandas
-
-# --- Environment and Parsing ---
-python-dateutil
-
-# --- Optional (for Web Loader, safer HTML parsing, etc.) ---
-lxml
-
-# --- For .env and file handling ---
-dotenv
-
-
+SpeechRecognition
