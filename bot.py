@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 # Import necessary Google/Gemini components from LangChain
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
@@ -1103,5 +1103,6 @@ st.markdown(f'''
   </a>
 </div>
 ''', unsafe_allow_html=True)
+
 
 
