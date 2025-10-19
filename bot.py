@@ -12,7 +12,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmb
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
+from langchain.chains.retrieval_qa.base import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 import asyncio
 
@@ -1103,6 +1103,7 @@ st.markdown(f'''
   </a>
 </div>
 ''', unsafe_allow_html=True)
+
 
 
 
