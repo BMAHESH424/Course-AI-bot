@@ -1,12 +1,13 @@
 streamlit
-langchain==0.1.13           # Stable core package
-langchain-google-genai==0.0.12 # Compatible Google integration package
-langchain-community==0.0.30  # Compatible community package
-langchain-core==0.1.33      # Compatible core utilities package
-langchain-text-splitters==0.0.1 # Minimal modular package for compatibility
+langchain
+langchain-google-genai
+langchain-community
+langchain-core
+langchain-text-splitters
 beautifulsoup4
 faiss-cpu
 python-dotenv
 gTTS
 deep-translator
 SpeechRecognition
+
