@@ -306,18 +306,42 @@ st.markdown(
       margin: -4px 0 12px 0;
     }
     .sidebar-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(30,30,30,0.9) 100%);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+      backdrop-filter: blur(15px);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .sidebar-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    
     .sidebar-card:hover {
-      border-color: var(--border-light);
-      transform: translateY(-1px);
-      transition: all 0.2s ease;
+      border-color: rgba(99,102,241,0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(99,102,241,0.2);
+      background: linear-gradient(135deg, rgba(30,30,30,0.95) 0%, rgba(40,40,50,0.9) 100%);
+    }
+    
+    .sidebar-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .section-title { 
@@ -347,10 +371,41 @@ st.markdown(
       font-size: 0.8rem;
       color: var(--text-accent);
     }
-    .status-pill { padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--border); }
-    .status-ok { background: rgba(16,185,129,0.12); color: #10b981; border-color: rgba(16,185,129,0.35); }
-    .status-warn { background: rgba(245,158,11,0.12); color: #f59e0b; border-color: rgba(245,158,11,0.35); }
-    .status-err { background: rgba(239,68,68,0.12); color: #ef4444; border-color: rgba(239,68,68,0.35); }
+    .status-pill { 
+      padding: 8px 16px; 
+      border-radius: 20px; 
+      font-size: 0.8rem; 
+      font-weight: 600;
+      border: 1px solid var(--border); 
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .status-ok { 
+      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.1)); 
+      color: #10b981; 
+      border-color: rgba(16,185,129,0.4);
+      box-shadow: 0 2px 8px rgba(16,185,129,0.2);
+    }
+    .status-warn { 
+      background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.1)); 
+      color: #f59e0b; 
+      border-color: rgba(245,158,11,0.4);
+      box-shadow: 0 2px 8px rgba(245,158,11,0.2);
+    }
+    .status-err { 
+      background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.1)); 
+      color: #ef4444; 
+      border-color: rgba(239,68,68,0.4);
+      box-shadow: 0 2px 8px rgba(239,68,68,0.2);
+    }
+    
+    .status-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
     
 
     /* Buttons */
@@ -523,6 +578,54 @@ st.markdown(
       background: var(--primary-dark);
     }
 
+    /* Enhanced Download Buttons */
+    .stDownloadButton > button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      width: 100%;
+    }
+    
+    .stDownloadButton > button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+    
+    /* Enhanced Checkbox Styling */
+    .stCheckbox > div > div {
+      background: transparent;
+      border: none;
+    }
+    
+    .stCheckbox > div > div > label {
+      color: var(--text-primary) !important;
+      font-weight: 600 !important;
+      font-size: 0.95rem !important;
+      opacity: 1 !important;
+    }
+    
+    .stCheckbox > div > div > label:hover {
+      color: var(--primary-light) !important;
+    }
+    
+    /* Checkbox input styling */
+    .stCheckbox > div > div > label > input[type="checkbox"] {
+      accent-color: var(--primary);
+      transform: scale(1.2);
+      margin-right: 8px;
+    }
+
     /* Hide default Streamlit elements */
     .stApp > header { display: none; }
     #MainMenu { visibility: hidden; }
@@ -639,22 +742,33 @@ def maybe_translate(text: str, target_lang_code: str) -> str:
         return text
 
 
-# ===== Sidebar =====
+# ===== Enhanced Sidebar =====
 with st.sidebar:
-    st.markdown('<div class="sidebar-card">🌐 Language</div>', unsafe_allow_html=True)
+    # Language Selection Card
+    st.markdown('''
+    <div class="sidebar-card">
+        <div class="sidebar-card-title">🌐 Language Settings</div>
+    ''', unsafe_allow_html=True)
     target_language_name = st.selectbox("Response Language", list(LANGUAGE_MAP.keys()), index=0)
     target_lang_code = LANGUAGE_MAP[target_language_name]
     st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-card">🎛️ I/O Options</div>', unsafe_allow_html=True)
+    # I/O Options Card
+    st.markdown('''
+    <div class="sidebar-card">
+        <div class="sidebar-card-title">🎛️ Input/Output Options</div>
+    ''', unsafe_allow_html=True)
     # Client Request 2: Enable Microphone Input (already present, ensured not disabled if sr is available)
     enable_voice = st.checkbox("🎤 Microphone input (Client Request 2)", value=False, disabled=(sr is None))
     # Client Request 1: Response should be spell out (already present, ensured not disabled if gTTS is available)
     enable_tts = st.checkbox("🔊 Text-to-speech (Client Request 1)", value=False, disabled=(gTTS is None))
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Export & Share
-    st.markdown('<div class="sidebar-card">🔗 Export & Share</div>', unsafe_allow_html=True)
+    # Export & Share Card
+    st.markdown('''
+    <div class="sidebar-card">
+        <div class="sidebar-card-title">🔗 Export & Share</div>
+    ''', unsafe_allow_html=True)
     
     # Use the history of the currently active course for export
     active_course_key = st.session_state.get("active_course_name", "the selected course")
@@ -727,17 +841,8 @@ if current_course_key not in st.session_state["all_messages"]:
 st.session_state["messages"] = st.session_state["all_messages"][current_course_key]
 
 
-# ===== Actions (Clear Chat and Course Selection) =====
-action_clear, action_adv = st.columns([1,1])
-
-with action_clear:
-    # MODIFICATION 1: Clear only the active course's chat history
-    def clear_active_chat():
-        st.session_state["messages"].clear()
-        st.toast(f"💬 Chat history for **{st.session_state['active_course_name']}** cleared")
-        
-    if st.button("🗑️ Clear Chat", use_container_width=True):
-        clear_active_chat()
+# ===== Actions (Course Selection and Clear Chat) =====
+action_adv, action_clear = st.columns([1,1])
 
 with action_adv:
     course_options: Dict[str, str] = {
@@ -793,23 +898,21 @@ with action_adv:
     # Manually trigger load if selected_course_name changes or if it's the first run
     if selected_course_name != "Select Course (Click to Load)" and st.session_state.get("active_course_name") != selected_course_name:
         _on_course_change()
+
+with action_clear:
+    # MODIFICATION 1: Clear only the active course's chat history
+    def clear_active_chat():
+        st.session_state["messages"].clear()
+        st.toast(f"💬 Chat history for **{st.session_state['active_course_name']}** cleared")
         
-    # Display current status
-    if st.session_state.get("retriever_ready"):
-        st.markdown(f'<div class="status-pill status-ok">Active RAG: {selected_course_name}</div>', unsafe_allow_html=True)
-    elif selected_course_name != "Select Course (Click to Load)":
-        st.markdown(f'<div class="status-pill status-warn">Loading RAG...</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="status-pill status-err">No Course Selected</div>', unsafe_allow_html=True)
-        
-    st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("🗑️ Clear Chat", use_container_width=True):
+        clear_active_chat()
 
 
 # ===== Chat Interface =====
 chat_tab, history_tab = st.tabs(["💬 Chat", "📜 History"])
 
 with chat_tab:
-    st.markdown('<div class="chat-container"> 💬 AI Course Assistant</div>', unsafe_allow_html=True)
     
     active_course_name = st.session_state.get("active_course_name", "None")
     active_url = st.session_state.get('active_url', '')
